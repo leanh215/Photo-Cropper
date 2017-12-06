@@ -2,8 +2,7 @@
 ### Description
 Crop photo using polygon
 ### Usage
-- Add dependencies
-- Add library to build.gradle (app level) 
+- Add library to build.gradle (app level)
 ```
     repositories {
     maven {
