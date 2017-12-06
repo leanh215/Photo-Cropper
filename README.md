@@ -2,14 +2,8 @@
 ### Description
 Crop photo using polygon
 ### Usage
-- Add library to build.gradle (app level)
-```
-    repositories {
-    maven {
-        url  "https://dl.bintray.com/tinyhands/maven"
-    }
-}
-```
+- Add to `build.gradle` 
+
 ```
     compile 'vn.tinyhands:photo-cropper:0.0.1'
 ```
