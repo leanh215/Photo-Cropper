@@ -2,6 +2,9 @@
 ### Description
 Crop photo using polygon
 ### Usage
+
+<img src="https://raw.githubusercontent.com/leanh215/PhotoPolygonCropper/master/demo.gif" width="300">
+
 - Add to `build.gradle` 
 
 ```
