@@ -20,18 +20,21 @@ public class MainActivity extends AppCompatActivity {
         final CropImageView cropImageView = findViewById(R.id.img_photo);
         cropImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.photo));
 
+        final CropListener cropListener = new CropListener() {
+            @Override
+            public void onFinish(Bitmap bitmap) {
+                ImageView imgCropped = findViewById(R.id.img_cropped);
+                imgCropped.setImageBitmap(bitmap);
+            }
+        };
+
         findViewById(R.id.btn_crop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cropImageView.crop(new CropListener() {
-                    @Override
-                    public void onFinish(Bitmap bitmap) {
-                        ImageView imgCropped = findViewById(R.id.img_cropped);
-                        imgCropped.setImageBitmap(bitmap);
-                    }
-                });
+                cropImageView.crop(cropListener, true);
             }
         });
+
 
     }
 }
