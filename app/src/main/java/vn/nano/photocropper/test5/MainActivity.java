@@ -17,13 +17,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final CropImageView cropImageView = findViewById(R.id.img_photo);
+        final CropImageView cropImageView = (CropImageView) findViewById(R.id.img_photo);
         cropImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.photo));
 
         final CropListener cropListener = new CropListener() {
             @Override
             public void onFinish(Bitmap bitmap) {
-                ImageView imgCropped = findViewById(R.id.img_cropped);
+                ImageView imgCropped = (ImageView) findViewById(R.id.img_cropped);
                 imgCropped.setImageBitmap(bitmap);
             }
         };
