@@ -1,4 +1,4 @@
-package vn.nano.photocropper.test5;
+package vn.nano.photocropper.photocropper;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package vn.nano.photocropper.test5;
+package vn.nano.photocropper.photocropper;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("vn.nano.photocropper.test5", appContext.getPackageName());
+        assertEquals("vn.nano.photocropper.photocropper", appContext.getPackageName());
     }
 }
