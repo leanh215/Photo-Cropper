@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerInside" />
 
         <vn.nano.photocropper.CropOverlayView
             android:id="@+id/overlay_crop"
