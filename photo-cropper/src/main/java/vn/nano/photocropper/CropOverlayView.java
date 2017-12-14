@@ -39,6 +39,8 @@ public class CropOverlayView extends View {
     private int currentWidth = 0;
     private int currentHeight = 0;
 
+    private int minX, maxX, minY, maxY;
+
     public CropOverlayView(Context context) {
         super(context);
     }
@@ -49,6 +51,8 @@ public class CropOverlayView extends View {
 
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
+        resetPoints();
+        invalidate();
     }
 
     @Override
@@ -60,6 +64,7 @@ public class CropOverlayView extends View {
             currentHeight = getHeight();
             resetPoints();
         }
+        Log.e("stk", "canvasSize=" + getWidth() + "x" + getHeight());
 
         drawBackground(canvas);
         drawVertex(canvas);
@@ -68,10 +73,47 @@ public class CropOverlayView extends View {
     }
 
     private void resetPoints() {
-        topLeft = new Point(defaultMargin, defaultMargin);
-        topRight = new Point(getWidth() - defaultMargin, defaultMargin);
-        bottomLeft = new Point(defaultMargin, getHeight() - defaultMargin);
-        bottomRight = new Point(getWidth() - defaultMargin, getHeight() - defaultMargin);
+
+        Log.e("stk", "resetPoints, bitmap=" + bitmap);
+
+        // 1. calculate bitmap size in new canvas
+        float scaleX = bitmap.getWidth() * 1.0f / getWidth();
+        float scaleY = bitmap.getHeight() * 1.0f / getHeight();
+        float maxScale = Math.max(scaleX, scaleY);
+
+        // 2. determine minX , maxX if maxScale = scaleY | minY, maxY if maxScale = scaleX
+        int minX = 0;
+        int maxX = getWidth();
+        int minY = 0;
+        int maxY = getHeight();
+
+        if (maxScale == scaleY) { // image very tall
+            int bitmapInCanvasWidth = (int) (bitmap.getWidth() / maxScale);
+            minX = (getWidth() - bitmapInCanvasWidth) / 2;
+            maxX = getWidth() - minX;
+        } else { // image very wide
+            int bitmapInCanvasHeight = (int) (bitmap.getHeight() / maxScale);
+            minY = (getHeight() - bitmapInCanvasHeight)/2;
+            maxY = getHeight() - minY;
+        }
+
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
+
+        if (maxX - minX < defaultMargin || maxY - minY < defaultMargin)
+            defaultMargin = 0; // remove min
+        else
+            defaultMargin = 100;
+
+        Log.e("stk", "maxX - minX=" + (maxX - minX));
+        Log.e("stk", "maxY - minY=" + (maxY - minY));
+
+        topLeft = new Point(minX + defaultMargin, minY + defaultMargin);
+        topRight = new Point(maxX - defaultMargin, minY + defaultMargin);
+        bottomLeft = new Point(minX + defaultMargin, maxY - defaultMargin);
+        bottomRight = new Point(maxX - defaultMargin, maxY - defaultMargin);
     }
 
     @Override
@@ -106,8 +148,12 @@ public class CropOverlayView extends View {
         canvas.drawCircle(topRight.x, topRight.y, vertexSize, paint);
         canvas.drawCircle(bottomLeft.x, bottomLeft.y, vertexSize, paint);
         canvas.drawCircle(bottomRight.x, bottomRight.y, vertexSize, paint);
-    }
 
+        Log.e("stk",
+                "vertextPoints=" +
+                topLeft.toString() + " " + topRight.toString() + " " + bottomRight.toString() + " " + bottomLeft.toString());
+
+    }
     private void drawEdge(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -231,64 +277,48 @@ public class CropOverlayView extends View {
 
     private void adjustTopLeft(int deltaX, int deltaY) {
         int newX = topLeft.x + deltaX;
-        if (newX < 0) newX = 0;
-        if (newX > getWidth()) newX = getWidth();
-//        if (topRight.x - newX < minDistance) newX = topRight.x - minDistance;
-//        if (bottomRight.x - newX < minDistance) newX = bottomRight.x - minDistance;
+        if (newX < minX) newX = minX;
+        if (newX > maxX) newX = maxX;
 
         int newY = topLeft.y + deltaY;
-        if (newY < 0) newY = 0;
-        if (newY > getHeight()) newY = 0;
-//        if (bottomLeft.y - newY < minDistance) newY = bottomLeft.y - minDistance;
-//        if (bottomRight.y - newY < minDistance) newY = bottomRight.y - minDistance;
+        if (newY < minY) newY = minY;
+        if (newY > maxY) newY = maxY;
 
         topLeft.set(newX, newY);
     }
 
     private void adjustTopRight(int deltaX, int deltaY) {
         int newX = topRight.x + deltaX;
-        if (newX > getWidth()) newX = getWidth();
-        if (newX < 0) newX = 0;
-//        if (newX - topLeft.x < minDistance) newX = topLeft.x + minDistance;
-//        if (newX - bottomLeft.x < minDistance) newX = bottomLeft.x + minDistance;
+        if (newX > maxX) newX = maxX;
+        if (newX < minX) newX = minX;
 
         int newY = topRight.y + deltaY;
-        if (newY < 0) newY = 0;
-        if (newY > getHeight()) newY = getHeight();
-//        if (bottomRight.y - newY < minDistance) newY = bottomRight.y - minDistance;
-//        if (bottomLeft.y - newY < minDistance) newY = bottomLeft.y - minDistance;
+        if (newY < minY) newY = minY;
+        if (newY > maxY) newY = maxY;
 
         topRight.set(newX, newY);
     }
 
     private void adjustBottomLeft(int deltaX, int deltaY) {
         int newX = bottomLeft.x + deltaX;
-        if (newX < 0) newX = 0;
-        if (newX > getWidth()) newX = getWidth();
-//        if (bottomRight.x - newX < minDistance) newX = bottomRight.x - minDistance;
-//        if (topRight.x - newX < minDistance) newX = topRight.x - minDistance;
+        if (newX < minX) newX = minX;
+        if (newX > maxX) newX = maxX;
 
         int newY = bottomLeft.y + deltaY;
-        if (newY > getHeight()) newY = getHeight();
-        if (newY < 0) newY = 0;
-//        if (newY - topLeft.y < minDistance) newY = topLeft.y + minDistance;
-//        if (newY - topRight.y < minDistance) newY = topRight.y - minDistance;
+        if (newY > maxY) newY = maxY;
+        if (newY < minY) newY = minY;
 
         bottomLeft.set(newX, newY);
     }
 
     private void adjustBottomRight(int deltaX, int deltaY) {
         int newX = bottomRight.x + deltaX;
-        if (newX > getWidth()) newX = getWidth();
-        if (newX < 0) newX = 0;
-//        if (newX - bottomLeft.x < minDistance) newX = bottomLeft.x + minDistance;
-//        if (newX - topLeft.x < minDistance) newX = topLeft.x + minDistance;
+        if (newX > maxX) newX = maxX;
+        if (newX < minX) newX = minX;
 
         int newY = bottomRight.y + deltaY;
-        if (newY > getHeight()) newY = getHeight();
-        if (newY < 0) newY = 0;
-//        if (newY - topRight.y < minDistance) newY = topRight.y + minDistance;
-//        if (newY - topLeft.y < minDistance) newY = topLeft.y + minDistance;
+        if (newY > maxY) newY = maxY;
+        if (newY < minY) newY = minY;
 
         bottomRight.set(newX, newY);
     }
@@ -296,14 +326,26 @@ public class CropOverlayView extends View {
     public void crop(CropListener cropListener, boolean needStretch) {
         if (topLeft == null) return;
 
-        // re-calculate coordinate in original bitmap
-        float scaleRatio = bitmap.getWidth() * 1.0f / getWidth();
-        Point bitmapTopLeft = new Point((int) (topLeft.x * scaleRatio), (int) (topLeft.y * scaleRatio));
-        Point bitmapTopRight = new Point((int) (topRight.x * scaleRatio), (int) (topRight.y * scaleRatio));
-        Point bitmapBottomLeft = new Point((int) (bottomLeft.x * scaleRatio), (int) (bottomLeft.y * scaleRatio));
-        Point bitmapBottomRight = new Point((int) (bottomRight.x * scaleRatio), (int) (bottomRight.y * scaleRatio));
+        // calculate bitmap size in new canvas
+        float scaleX = bitmap.getWidth() * 1.0f / getWidth();
+        float scaleY = bitmap.getHeight() * 1.0f / getHeight();
+        float maxScale = Math.max(scaleX, scaleY);
 
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        // re-calculate coordinate in original bitmap
+        Log.e("stk", "maxScale=" + maxScale);
+
+        Point bitmapTopLeft = new Point((int) ((topLeft.x - minX) * maxScale), (int) ((topLeft.y - minY) * maxScale));
+        Point bitmapTopRight = new Point((int) ((topRight.x - minX) * maxScale), (int) ((topRight.y - minY) * maxScale));
+        Point bitmapBottomLeft = new Point((int) ((bottomLeft.x - minX) * maxScale), (int) ((bottomLeft.y - minY) * maxScale));
+        Point bitmapBottomRight = new Point((int) ((bottomRight.x - minX) * maxScale), (int) ((bottomRight.y - minY) * maxScale));
+
+        Log.e("stk", "bitmapPoints="
+                + bitmapTopLeft.toString() + " "
+                + bitmapTopRight.toString() + " "
+                + bitmapBottomRight.toString() + " "
+                + bitmapBottomLeft.toString() + " ");
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth()+1, bitmap.getHeight()+1, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
         Paint paint = new Paint();
@@ -358,7 +400,8 @@ public class CropOverlayView extends View {
 
             Log.e("stk", cut.getWidth() + "x" + cut.getHeight());
 
-            Log.e("stk", cutTopLeft.toString() + " "
+            Log.e("stk", "cutPoints="
+                        + cutTopLeft.toString() + " "
                         + cutTopRight.toString() + " "
                         + cutBottomRight.toString() + " "
                         + cutBottomLeft.toString() + " ");

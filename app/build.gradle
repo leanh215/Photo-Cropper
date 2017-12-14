@@ -30,6 +30,6 @@ dependencies {
 
     compile 'com.jakewharton.timber:timber:4.6.0'
 
-//    compile project(path: ':photo-cropper')
-    compile 'vn.tinyhands:photo-cropper:0.0.6'
+    compile project(path: ':photo-cropper')
+//    compile 'vn.tinyhands:photo-cropper:0.0.6'
 }

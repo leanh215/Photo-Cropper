@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -21,16 +22,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.photo);
-        final CropImageView cropImageView = (CropImageView) findViewById(R.id.crop_image_view);
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.photo_5);
+        Log.e("stk", "bitmapSize=" + mBitmap.getWidth() + "x" + mBitmap.getHeight());
+
+        final CropImageView cropImageView = findViewById(R.id.crop_image_view);
         cropImageView.setImageBitmap(mBitmap);
 
         final CropListener listener = new CropListener() {
             @Override
             public void onFinish(Bitmap bitmap) {
-                findViewById(R.id.img_cropped).setVisibility(View.VISIBLE);
-                ((ImageView)findViewById(R.id.img_cropped)).setImageBitmap(bitmap);
-                Timber.e("onFinish");
+//                findViewById(R.id.img_cropped).setVisibility(View.VISIBLE);
+//                ((ImageView)findViewById(R.id.img_cropped)).setImageBitmap(bitmap);
+//                Timber.e("onFinish");
+                cropImageView.setImageBitmap(bitmap);
             }
         };
 

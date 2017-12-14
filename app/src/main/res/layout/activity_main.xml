@@ -1,32 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/scrollView"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="vn.nano.photocropper.photocropper.MainActivity">
+        android:layout_above="@+id/ll_actions">
+
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/photo_5"-->
+            <!--android:scaleType="centerInside"-->
+            <!--/>-->
 
         <Button
             android:id="@+id/btn_pick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pick Photo"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <vn.nano.photocropper.CropImageView
             android:id="@+id/crop_image_view"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/img_cropped"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            android:adjustViewBounds="true"
+            android:background="#FF0" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:id="@+id/ll_actions"
+        >
 
         <Button
             android:id="@+id/btn_crop"
@@ -40,14 +61,7 @@
             android:layout_height="wrap_content"
             android:text="Rotate" />
 
-        <ImageView
-            android:id="@+id/img_cropped"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:background="#FF0"
-            />
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
