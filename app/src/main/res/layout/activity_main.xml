@@ -11,21 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_above="@+id/ll_actions">
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/photo_5"-->
-            <!--android:scaleType="centerInside"-->
-            <!--/>-->
-
-        <Button
-            android:id="@+id/btn_pick"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pick Photo"
-            android:visibility="gone" />
+        android:layout_above="@+id/ll_actions"
+        android:gravity="center"
+        >
 
         <vn.nano.photocropper.CropImageView
             android:id="@+id/crop_image_view"

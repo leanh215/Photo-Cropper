@@ -3,13 +3,12 @@ package vn.nano.photocropper.photocropper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import timber.log.Timber;
 import vn.nano.photocropper.CropImageView;
 import vn.nano.photocropper.CropListener;
 
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.photo_5);
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_test);
         Log.e("stk", "bitmapSize=" + mBitmap.getWidth() + "x" + mBitmap.getHeight());
 
         final CropImageView cropImageView = findViewById(R.id.crop_image_view);
@@ -31,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
         final CropListener listener = new CropListener() {
             @Override
             public void onFinish(Bitmap bitmap) {
-//                findViewById(R.id.img_cropped).setVisibility(View.VISIBLE);
-//                ((ImageView)findViewById(R.id.img_cropped)).setImageBitmap(bitmap);
-//                Timber.e("onFinish");
-                cropImageView.setImageBitmap(bitmap);
+//                cropImageView.setImageBitmap(bitmap);
+                findViewById(R.id.crop_image_view).setVisibility(View.GONE);
+
+                findViewById(R.id.img_cropped).setVisibility(View.VISIBLE);
+                ((ImageView)findViewById(R.id.img_cropped)).setImageBitmap(bitmap);
             }
         };
 
@@ -51,12 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 rotateBitmap();
             }
         });
-
     }
 
     private void rotateBitmap() {
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
+        matrix.postRotate( 90);
 
         mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, false);
         ((CropImageView) findViewById(R.id.crop_image_view)).setImageBitmap(mBitmap);
