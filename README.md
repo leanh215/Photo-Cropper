@@ -8,7 +8,7 @@ Crop photo using polygon
 - Add to `build.gradle` 
 
 ```
-    compile 'vn.tinyhands:photo-cropper:0.0.7'
+    compile 'vn.tinyhands:photo-cropper:0.0.8'
 ```
 - Declare `CropImageView` in your layout
 ```

@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -22,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_test);
-        Log.e("stk", "bitmapSize=" + mBitmap.getWidth() + "x" + mBitmap.getHeight());
-
         final CropImageView cropImageView = findViewById(R.id.crop_image_view);
         cropImageView.setImageBitmap(mBitmap);
 

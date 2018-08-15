@@ -8,7 +8,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
-        versionName "0.0.7"
+        versionName "0.0.8"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -39,7 +39,7 @@ ext {
     // package info
     publishedGroupId = 'vn.tinyhands'
     artifact = 'photo-cropper'
-    libraryVersion = '0.0.7'
+    libraryVersion = '0.0.8'
 
     // description
     libraryName = 'PhotoCropper'

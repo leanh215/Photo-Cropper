@@ -64,7 +64,8 @@ public class CropOverlayView extends View {
             currentHeight = getHeight();
             resetPoints();
         }
-        Log.e("stk", "canvasSize=" + getWidth() + "x" + getHeight());
+
+        if (bitmap == null) return;
 
         drawBackground(canvas);
         drawVertex(canvas);
@@ -73,8 +74,7 @@ public class CropOverlayView extends View {
     }
 
     private void resetPoints() {
-
-        Log.e("stk", "resetPoints, bitmap=" + bitmap);
+        if (bitmap == null) return;
 
         // 1. calculate bitmap size in new canvas
         float scaleX = bitmap.getWidth() * 1.0f / getWidth();
